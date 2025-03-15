@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/jovyan/4555/lab1-team-kash_mr-p/compile.py", line 154, in <module>
+    generate_assembly(node)       
+  File "/home/jovyan/4555/lab1-team-kash_mr-p/compile.py", line 145, in generate_assembly
+    arg_name = value.args[0].id
+AttributeError: 'Constant' object has no attribute 'id'

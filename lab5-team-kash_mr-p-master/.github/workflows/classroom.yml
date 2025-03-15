@@ -1,0 +1,33 @@
+name: Autograding Tests
+'on':
+- push
+- workflow_dispatch
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: autograde
+      id: autograde
+      uses: education/autograding-command-grader@v1
+      with:
+        test-name: autograde
+        setup-command: sudo apt-get install gcc-multilib; sudo -H pip3 install pytest;
+          sudo -H pip3 install ply;  sudo -H pip3 install lark;   chmod u+x pyyc;
+          sudo apt-get install libatlas3-base
+        command: python3 --version; python3.10 --version; cd tests; pytest --pyyctests
+          autograde
+        timeout: 10
+    - name: Autograding Reporter
+      uses: education/autograding-grading-reporter@v1
+      env:
+        AUTOGRADE_RESULTS: "${{steps.autograde.outputs.result}}"
+      with:
+        runners: autograde
